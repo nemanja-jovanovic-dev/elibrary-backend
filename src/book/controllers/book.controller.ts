@@ -1,4 +1,5 @@
-import { Body, Controller, Get, NotFoundException, Post } from "@nestjs/common";
+import { Body, Controller, Get, NotFoundException, Post, UseGuards } from "@nestjs/common";
+import { JwtGuard } from "src/auth/guards/jwt.guard";
 import { CreateBookDto } from "../dtos/create-book.dto";
 import { BookService } from "../services/book.service";
 
@@ -7,6 +8,7 @@ export class BookController {
     constructor(private readonly bookService: BookService) {
     }
 
+    @UseGuards(JwtGuard)
     @Get('')
     getAll() {
         return this.bookService.getAll();
