@@ -1,4 +1,5 @@
 import { Body, Controller, Get, NotFoundException, Post, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { JwtGuard } from "src/auth/guards/jwt.guard";
 import { CreateBookDto } from "../dtos/create-book.dto";
 import { BookService } from "../services/book.service";
@@ -8,21 +9,21 @@ export class BookController {
     constructor(private readonly bookService: BookService) {
     }
 
-    @UseGuards(JwtGuard)
     @Get('')
+    @UseGuards(JwtGuard)
     getAll() {
         return this.bookService.getAll();
     }
 
     @Post('')
     async create(@Body() book: CreateBookDto) {
-        const ccreatedBook = await this.bookService.create(book);
+        const createdBook = await this.bookService.create(book);
 
         if (!book) {
             throw new NotFoundException('not found bro');   
         }
 
-        return ccreatedBook;
+        return createdBook;
     }
 
 }

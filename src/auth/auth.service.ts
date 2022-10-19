@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Request, Response } from 'express';
+import { SECRET_KEY } from '../utils/constants';
 
 @Injectable()
 export class AuthService {
@@ -53,14 +55,25 @@ export class AuthService {
         return this.userService._getUserDetails(user);
     }
 
-    async login(existingUser: ExistingUserDto): Promise<{token: string} | null> {
+    async login(existingUser: ExistingUserDto, res: Response): Promise<{token: string} | null> {
         const {email, password} = existingUser;
         const user = await this.validateUser(email, password);
 
         if(!user) return null;
 
-        const jwt = await this.jwtService.signAsync({user});
+        const jwt = await this.jwtService.signAsync(user, {secret: SECRET_KEY,});
 
-        return {token: jwt};
+        if (!jwt) throw new ForbiddenException();
+
+        res.cookie('token', jwt, {httpOnly: true});
+        
+        res.status(200).send('Success!');
+
+        // return {token: jwt};
+    }
+
+    async logout(res: Response): Promise<Response> {
+        res.clearCookie('token');
+        return res.send('Logged out succesfully!');
     }
 }

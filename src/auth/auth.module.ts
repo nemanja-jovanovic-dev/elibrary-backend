@@ -5,15 +5,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './guards/jwt.guard';
 import { JwtStrategy } from './guards/jwt.strategy';
+import { SECRET_KEY } from '../utils/constants';
 
 @Module({
   imports: [UserModule, JwtModule.registerAsync({
     useFactory: () => ({
-      secret: 'secret',
-      signOptions: {expiresIn: '3600'}
+      secret: SECRET_KEY,
+      signOptions: {expiresIn: '3600000000'}
     })
   })],
+  // imports: [UserModule, JwtModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtGuard, JwtStrategy]
+  providers: [AuthService, JwtGuard, JwtStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}
