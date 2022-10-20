@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
 import { Request } from "express";
+import { ExtractJwt, Strategy } from "passport-jwt";
 import { SECRET_KEY } from "../../utils/constants";
 
 @Injectable()

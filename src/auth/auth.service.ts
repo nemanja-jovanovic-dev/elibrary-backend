@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
+import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
-import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
-import { JwtService } from '@nestjs/jwt';
-import { Request, Response } from 'express';
+import { UserService } from 'src/user/user.service';
 import { SECRET_KEY } from '../utils/constants';
 
 @Injectable()
@@ -43,12 +43,14 @@ export class AuthService {
         const doesUserExists = !!user;
 
         if (!doesUserExists) {
+            //throw exception
             return null;
         }
 
         const doesPasswordMatch = await this.doesPasswordMatch(password, user.password);
 
         if (!doesPasswordMatch) {
+            //throw exception
             return null;
         }
 
@@ -61,7 +63,7 @@ export class AuthService {
 
         if(!user) return null;
 
-        const jwt = await this.jwtService.signAsync(user, {secret: SECRET_KEY,});
+        const jwt = await this.jwtService.signAsync(user, {secret: SECRET_KEY});
 
         if (!jwt) throw new ForbiddenException();
 

@@ -1,5 +1,4 @@
 import { Body, Controller, Get, NotFoundException, Post, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { JwtGuard } from "src/auth/guards/jwt.guard";
 import { CreateBookDto } from "../dtos/create-book.dto";
 import { BookService } from "../services/book.service";

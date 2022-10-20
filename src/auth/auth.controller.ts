@@ -1,5 +1,5 @@
-import { Controller, Post, Body, HttpStatus, HttpCode, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
