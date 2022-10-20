@@ -7,7 +7,7 @@ export class UserController {
     constructor(private userService: UserService) {}
 
     @Get(':id')
-    getUser(@Param('id') id: string): Promise<UserDetails | null> {
+    getUser(@Param('id') id: string): Promise<UserDetails | string> {
         return this.userService.findById(id);
     }
 }

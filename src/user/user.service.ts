@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDetails } from './user-details.interface';
@@ -8,7 +8,7 @@ import { User, UserDocument } from './user.schema';
 export class UserService {
     constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
 
-    _getUserDetails(user: UserDocument | any): UserDetails {
+    _getUserDetails(user: UserDocument): UserDetails {
         return {
             id: user._id,
             name: user.name,
@@ -31,10 +31,14 @@ export class UserService {
     }
 
     async findById(id: string): Promise<UserDetails | null> {
-        const user = this.userModel.findById(id).exec();
 
-        if (!user) {
-            return null;
+        let user: UserDocument;
+
+        try {
+            user = await this.userModel.findById(id).exec();
+        } catch (err) {
+            throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Invalid user id'}, HttpStatus.NOT_FOUND);
+            
         }
 
         return this._getUserDetails(user);

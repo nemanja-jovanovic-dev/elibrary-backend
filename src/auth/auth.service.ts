@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
+import { User } from 'src/user/user.schema';
 import { UserService } from 'src/user/user.service';
 import { SECRET_KEY } from '../utils/constants';
 
@@ -57,7 +58,7 @@ export class AuthService {
         return this.userService._getUserDetails(user);
     }
 
-    async login(existingUser: ExistingUserDto, res: Response): Promise<{token: string} | null> {
+    async login(existingUser: ExistingUserDto, res: Response): Promise<void> {
         const {email, password} = existingUser;
         const user = await this.validateUser(email, password);
 
@@ -68,10 +69,7 @@ export class AuthService {
         if (!jwt) throw new ForbiddenException();
 
         res.cookie('token', jwt, {httpOnly: true});
-        
-        res.status(200).send('Success!');
-
-        // return {token: jwt};
+        res.status(200).send(user);
     }
 
     async logout(res: Response): Promise<Response> {
