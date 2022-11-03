@@ -24,7 +24,7 @@ describe('UserController', () => {
 
 	describe('getUser', () => {
 		describe('when getUser is called', () => {
-			let user: UserDetails;
+			let user: UserDetails | string;
 
 			beforeEach(async () => {
 				user = await userController.getUser(userStub().id);
