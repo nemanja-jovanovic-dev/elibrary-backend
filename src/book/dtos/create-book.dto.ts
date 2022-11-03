@@ -14,7 +14,7 @@ export class CreateBookDto {
 
     description: string;
 
-    rating: string;
+    rating: number;
 
     numberOfPages: string;
 

@@ -1,6 +1,7 @@
-import { Body, Controller, Get, NotFoundException, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/guards/jwt.guard";
 import { CreateBookDto } from "../dtos/create-book.dto";
+import { BookModel } from "../interfaces/book.interface";
 import { BookService } from "../services/book.service";
 
 @Controller('book')
@@ -23,6 +24,11 @@ export class BookController {
         }
 
         return createdBook;
+    }
+
+    @Get('/:id')
+    getById(@Param('id') id: string): Promise<BookModel> {
+        return this.bookService.getById(id);
     }
 
 }

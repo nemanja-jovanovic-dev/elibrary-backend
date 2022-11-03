@@ -14,14 +14,14 @@ export class Book {
     @Prop({ required: true })
     category: CategoryTypeEnum;
 
-    @Prop({ required: true })
+    @Prop({ required: true, type: String })
     addedBy: string;
 
     @Prop()
     description: string;
 
     @Prop()
-    rating: string;
+    rating: number;
 
     @Prop()
     numberOfPages: string;

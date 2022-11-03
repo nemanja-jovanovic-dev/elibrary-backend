@@ -1,11 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
-import { User } from 'src/user/user.schema';
 import { UserService } from 'src/user/user.service';
 import { SECRET_KEY } from '../utils/constants';
 
@@ -58,7 +57,7 @@ export class AuthService {
         return this.userService._getUserDetails(user);
     }
 
-    async login(existingUser: ExistingUserDto, res: Response): Promise<void> {
+    async login(existingUser: ExistingUserDto, res: Response, req: Request): Promise<any> {
         const {email, password} = existingUser;
         const user = await this.validateUser(email, password);
 
@@ -68,7 +67,7 @@ export class AuthService {
 
         if (!jwt) throw new ForbiddenException();
 
-        res.cookie('token', jwt, {httpOnly: true});
+        res.cookie('token', jwt, {sameSite: "none", secure: false});
         res.status(200).send(user);
     }
 
