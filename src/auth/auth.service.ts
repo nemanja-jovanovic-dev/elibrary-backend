@@ -57,7 +57,7 @@ export class AuthService {
         return this.userService._getUserDetails(user);
     }
 
-    async login(existingUser: ExistingUserDto, res: Response, req: Request): Promise<any> {
+    async login(existingUser: ExistingUserDto): Promise<any> {
         const {email, password} = existingUser;
         const user = await this.validateUser(email, password);
 
@@ -67,8 +67,7 @@ export class AuthService {
 
         if (!jwt) throw new ForbiddenException();
 
-        res.cookie('token', jwt, {sameSite: "none", secure: false});
-        res.status(200).send(user);
+        return {token: jwt};
     }
 
     async logout(res: Response): Promise<Response> {

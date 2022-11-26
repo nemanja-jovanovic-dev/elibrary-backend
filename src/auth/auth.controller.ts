@@ -16,8 +16,8 @@ export class AuthController {
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    login(@Body() user: ExistingUserDto, @Res() res: Response, @Req() req: Request): Promise<any> {
-        return this.authService.login(user, res, req);
+    login(@Body() user: ExistingUserDto): Promise<any> {
+        return this.authService.login(user);
     }
 
     @Post('logout')
