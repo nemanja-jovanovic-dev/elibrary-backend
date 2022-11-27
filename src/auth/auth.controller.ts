@@ -1,5 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
@@ -20,8 +19,14 @@ export class AuthController {
         return this.authService.login(user);
     }
 
+    @Get(':token')
+    @HttpCode(HttpStatus.OK)
+    getUserByToken(@Param('token') token: string): Promise<UserDetails> {
+        return this.authService.getUserByToken(token);
+    }
+
     @Post('logout')
-    logout(@Res() res: Response): Promise<Response> {
-        return this.authService.logout(res);
+    logout(): Promise<any> {
+        return this.authService.logout();
     }
 }
