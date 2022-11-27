@@ -1,7 +1,6 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
 import { ExistingUserDto } from 'src/user/dtos/existing-user.dto';
 import { NewUserDto } from 'src/user/dtos/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
@@ -43,8 +42,7 @@ export class AuthService {
         const doesUserExists = !!user;
 
         if (!doesUserExists) {
-            //throw exception
-            return null;
+            throw new NotFoundException();
         }
 
         const doesPasswordMatch = await this.doesPasswordMatch(password, user.password);
@@ -70,8 +68,22 @@ export class AuthService {
         return {token: jwt};
     }
 
-    async logout(res: Response): Promise<Response> {
-        res.clearCookie('token');
-        return res.send('Logged out succesfully!');
+    async getUserByToken(token: string): Promise<UserDetails> {
+
+        if (!token) {
+            throw new NotFoundException();
+        }
+
+        const userFromToken = this.jwtService.decode(token, {json: true});
+        
+        return {
+            id: userFromToken['id'],
+            email:  userFromToken['email'],
+            name:  userFromToken['name']
+        };
+    }
+
+    async logout(): Promise<any> {
+        return {logged: false};
     }
 }
