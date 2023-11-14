@@ -69,9 +69,9 @@ export class AuthService {
 
         res.cookie('token', jwt, {httpOnly: true});
         
-        res.status(200).send('Success!');
+        res.status(200).send({token: jwt});
 
-        // return {token: jwt};
+        return {token: jwt};
     }
 
     async logout(res: Response): Promise<Response> {

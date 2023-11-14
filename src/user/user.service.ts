@@ -6,37 +6,43 @@ import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
+	constructor(
+		@InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+	) {}
 
-    _getUserDetails(user: UserDocument | any): UserDetails {
-        return {
-            id: user._id,
-            name: user.name,
-            email: user.email
-        }
-    }
+	_getUserDetails(user: UserDocument | any): UserDetails {
+		return {
+			id: user._id,
+			name: user.name,
+			email: user.email,
+		};
+	}
 
-    async create(name: string, email: string, hashPassword: string): Promise<UserDocument> {
-        const newUser = new this.userModel({
-          name,
-          email,
-          password: hashPassword,
-        });
+	async create(
+		name: string,
+		email: string,
+		hashPassword: string,
+	): Promise<UserDocument> {
+		const newUser = new this.userModel({
+			name,
+			email,
+			password: hashPassword,
+		});
 
-        return newUser.save();
-    }
+		return newUser.save();
+	}
 
-    async findByEmail(email: string): Promise<UserDocument | null> {
-        return this.userModel.findOne({email}).exec();
-    }
+	async findByEmail(email: string): Promise<UserDocument | null> {
+		return this.userModel.findOne({ email }).exec();
+	}
 
-    async findById(id: string): Promise<UserDetails | null> {
-        const user = this.userModel.findById(id).exec();
+	async findById(id: string): Promise<UserDetails | null> {
+		const user = this.userModel.findById(id).exec();
 
-        if (!user) {
-            return null;
-        }
+		if (!user) {
+			return null;
+		}
 
-        return this._getUserDetails(user);
-    }
+		return this._getUserDetails(user);
+	}
 }

@@ -8,15 +8,15 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  // imports: [MongooseModule.forRoot('mongodb://localhost:27017/elibrary')],
-  imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/elibrary'),
-    CatsModule,
-    BookModule,
-    AuthModule,
-    UserModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	// imports: [MongooseModule.forRoot('mongodb://localhost:27017/elibrary')],
+	imports: [
+		MongooseModule.forRoot('mongodb://0.0.0.0:27017/elibrary'),
+		CatsModule,
+		BookModule,
+		AuthModule,
+		UserModule,
+	],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}
