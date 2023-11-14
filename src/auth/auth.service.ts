@@ -78,4 +78,11 @@ export class AuthService {
         res.clearCookie('token');
         return res.send('Logged out succesfully!');
     }
+
+    async getUserDetails(token: string, res: Response): Promise<void> {
+        const userDetails = await this.jwtService.decode(token);
+        console.log(userDetails);
+
+        res.status(200).send(userDetails);
+    }
 }
